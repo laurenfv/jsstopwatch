@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stopwatch</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    div.container {
+      background: #F5F5F5;
+      box-sizing: border-box;
+      padding: 20px;
+      margin: 0px auto;
+      min-height: 400px;
+      width: 300px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    span {
+      display: block;
+    }
+
+    span.date {
+      font-size: 36px;
+      text-align: center;
+    }
+
+    span.timer {
+      font-size: 100px;
+      text-align: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 50%;
+      background: #F5F5F5;
+      height: 75px;
+      width: 75px;
+      font-size: 18px;
+      margin: 5px;
+    }
+
+    button.start {
+      background: #2d9961;
+      float: left;
+      color: black;
+    }
+
+    button.stop {
+      background: red;
+      float: right;
+      color: black;
+      position: absolute;
+    }
+
+    button.split {
+      background: #FFFF66;
+      align: center;
+      color: black;
+    }
+
+    button:hover{
+      opacity: 0.5;
+    }
+
+    ul {
+      margin: 20px 0px 0px ;
+      padding: 0px;
+
+    }
+
+    ul li{
+      list-style: none;
+      border: 1px solid lightgrey;
+      padding: 10px 5px;
+      box-sizing: border-box;
+      margin: 10px;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <span class="date" id="clock">October 19, 2016</span>
+    <span class="timer" id="timer">00:00</span>
+    <button class = "split" id="split">Lap</button>
+    <button class="start" id="start">Start</button>
+    <button class="stop" id="stop">Stop</button>
+    <ul id="splits">
+    </ul>
+  </div>
+  <script>
+  intervalFunction = function(){
+          controller.updateDate()
+          controller.timer();
+      }
+
+      // controller
+      controller = {
+          start: function(){
+              this.updateDate();
+
+              this.interval = setInterval(intervalFunction, 1000);
+          },
+          stop: function(){
+              clearInterval(this.interval)
+          },
+          split: function(){
+              var li = document.createElement("li");
+              var c = document.getElementsByTagName("li").length + 1
+              li.innerHTML = "Lap "+c+" - " +document.getElementById("timer").innerHTML;
+              document.getElementById("splits").appendChild(li)
+          },
+          counter: 0,
+          timer: function(){
+              this.counter++;
+              var sec = this.counter % 60;
+              var min = Math.floor(this.counter / 60);
+              document.getElementById("timer").innerHTML = this.leadingZero(min)+":"+this.leadingZero(sec);
+          },
+          leadingZero: function(val){
+              return ( val < 10 ? "0"+val : val);
+          },
+          updateDate:function(){
+              document.getElementById("clock").innerHTML = new Date()
+          }
+      }
+
+      // view
+      document.getElementById("start").onclick = function() { controller.start() };
+      document.getElementById("stop").onclick = function() { controller.stop() };
+      document.getElementById("split").onclick = function() { controller.split() };
+    </script>
+</body>
+</html>
